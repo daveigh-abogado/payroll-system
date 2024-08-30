@@ -1,0 +1,139 @@
+<!--
+We have not discussed the HTML language code in our program with anyone other than our instructor
+or the teaching assistants assigned to this course.
+We have not used HTML language code obtained from another student, or any other unauthorized
+source, either modified or unmodified.
+If any HTML language code or documentation used in our program was obtained from another source,
+such as a textbook or course notes, that has been clearly noted with a proper citation in the
+comments of our program.
+-->
+{% extends 'payroll_app/base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'payroll_app/message.html' %}
+   <div class="row justify-content-center">
+       <div class="col-10">
+        <h2 class="mb-3 text-center">Payroll Creation</h2>
+        <div class="card mb-5 bg-light mx-auto col-12">
+               <div class="card-body">
+                   <form method="POST" action="{% url 'create_payslip' %}">{% csrf_token %}
+                       <div class="form-group row justify-content-center">
+                           <label for="payrollfor" class="mb-1 col-sm-2 col-form-label">Payroll for:</label>
+                           <div class="col-sm-4">
+                               <select class="form-select" id="payrollfor" name="payrollfor" required>
+                                   <option selected>Choose...</option>
+                                   <option value="All">All Employees</option>
+                                   <optgroup label="ID Numbers">
+                                       {% for e in employees %}
+                                           <option value="{{ e.id_number }}">{{ e.name }} | {{ e.id_number }}</option>
+                                       {% endfor %}
+                                   </optgroup>
+                               </select>
+                           </div>
+                       </div>
+                       <div class="form-group mt-4 row justify-content-center">
+                           <label for="month" class="col-sm-1 col-form-label">Month:</label>
+                           <div class="col-sm-3">
+                               <select class="form-select" id="month" name="month" required>
+                                   <option selected>Choose...</option>
+                                   <option value="January">January</option>
+                                   <option value="February">February</option>
+                                   <option value="March">March</option>
+                                   <option value="April">April</option>
+                                   <option value="May">May</option>
+                                   <option value="June">June</option>
+                                   <option value="July">July</option>
+                                   <option value="August">August</option>
+                                   <option value="September">September</option>
+                                   <option value="October">October</option>
+                                   <option value="November">November</option>
+                                   <option value="December">December</option>
+                               </select>
+                           </div>
+                           <label for="year" class="col-sm-1 col-form-label">Year:</label>
+                           <div class="col-sm-3">
+                               <input type="text" class="form-control" id="year" name="year" placeholder="2000-2024" required style="width: 120px;">
+                           </div>
+                           <label for="cycle" class="col-sm-1 col-form-label">Cycle:</label>
+                           <div class="col-sm-3">
+                               <select class="form-select" id="cycle" name="cycle" required>
+                                   <option selected disabled hidden>Choose...</option>
+                                   <option value="1">1</option>
+                                   <option value="2">2</option>
+                               </select>                               
+                           </div>
+                       </div>
+                       <div class="row justify-content-center">
+                           <div class="col-4 mt-4">
+                               <button type="submit" class="btn btn-outline-success btn-block" href="{% url 'view_employees' %}" style="width: 100%">Submit</button>
+                           </div>
+                           
+                       </div>
+                   </form>
+               </div>
+           </div>
+           <div class="card mb-5 mx-auto col-12">
+               <div class="card-header text-center" style="color: black;">
+                   <h2>Payslips Summary</h2>
+               </div>
+           <div class="card-body">
+            <div class="input-group mb-3">
+                <input type="text" id="searchInput" class="form-control" style="border-radius: 10px;" placeholder="Search Payslips" onkeyup="searchPayslips()">
+            </div>
+            <div class="table-responsive">
+                <table class="table" id="payslipTable">
+                    <thead class="bg-custom text-light">
+                        <tr>
+                            <th class="col-3 text-light" scope="col">Name | ID Number</th>
+                            <th class="col-2 text-light" scope="col">Date</th>
+                            <th class="col text-light" scope="col">Cycle</th>
+                            <th class="col text-light" scope="col">Total Pay</th>
+                            <th class="col-auto text-light" scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-light" id="payslipTableBody">
+                        {% for p in payslips %}
+                        <tr>
+                            <td>{{ p.id_number.name }} | {{ p.id_number.id_number }}</td>
+                            <td>{{ p.month }} {{ p.date_range }}, {{ p.year }}</td>
+                            <td>{{ p.pay_cycle }}</td>
+                            <td>₱{{ p.total_pay|floatformat:2 }}</td>
+                            <td>
+                                <a href="{% url 'view_payslips' p.pk %}" class="btn btn-outline-success" role="button">View</a>
+                                <a href="{% url 'delete_payslip' p.pk %}" class="btn btn-outline-danger" role="button">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--Extra Feature: Search Bar-->
+<script>
+    function searchPayslips() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("payslipTable");
+        tr = table.getElementsByTagName("tr");
+   
+        for (i = 0; i < tr.length; i++) {
+            tdName = tr[i].getElementsByTagName("td")[0]; // to target the first column for search (name / id number)
+            tdDate = tr[i].getElementsByTagName("td")[1]; // to target the second column for search (date)
+            if (tdName && tdDate) {
+                txtValueName = tdName.textContent || tdName.innerText;
+                txtValueDate = tdDate.textContent || tdDate.innerText;
+                if (txtValueName.toUpperCase().indexOf(filter) > -1 || txtValueDate.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+   </script>
+{% endblock %}

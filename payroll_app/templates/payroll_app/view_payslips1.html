@@ -1,0 +1,75 @@
+<!--
+We have not discussed the HTML language code in our program with anyone other than our instructor
+or the teaching assistants assigned to this course.
+We have not used HTML language code obtained from another student, or any other unauthorized
+source, either modified or unmodified.
+If any HTML language code or documentation used in our program was obtained from another source,
+such as a textbook or course notes, that has been clearly noted with a proper citation in the
+comments of our program.
+-->
+{% extends 'payroll_app/base.html' %}
+{% load static %}
+
+{% block content %} 
+    <div class="col-10 mt-2 justify-content-center">
+        <div class="card p-4 mb-5">
+            <div class="row">
+                <div class="col-6">
+                    <p>NAME: {{ p.id_number.name }}</p>
+                    <p>ID NUMBER: {{ p.id_number.id_number }}</p>
+                </div>
+                <div class="col-6 text-end">
+                    <p>DATE: {{ p.month }} {{ p.date_range }}, {{ p.year }}</p>
+                    <p>PAYSLIP ID: {{ p.pk }}</p>
+                </div>
+            </div>
+
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col-8"></div>
+                    <h6 class="col-4">AMOUNT</h6>
+                </div>
+                <h6 class="row">EARNINGS:</h6>
+                <div class="row ml-2">
+                    <p class="col-6">Base Pay</p>
+                    <p class="col-2">{{ cyclerate }}</p>  
+                </div>
+                <div class="row">
+                    <p class="col-6">Allowance</p>
+                    <p class="col-2">{{ p.earnings_allowance|floatformat:2 }}</p>
+                </div>
+                <div class="row">
+                    <p class="col-6">Overtime</p>
+                    <p class="col-2">{{ p.overtime|floatformat:2 }}</p>
+                </div>
+                <div class="row mt-3">
+                    <h6 class="col-8">GROSS PAY</h6>
+                    <h6 class="col-4">PHP {{ gross|floatformat:2 }}</h6>  
+                </div>
+                <hr>
+                <h6 class="row">DEDUCTIONS:</h6>
+                <div class="row ml-2">
+                    <p class="col-6">W/HOLDING TAX</p>
+                    <p class="col-2">{{ p.deductions_tax|floatformat:2 }}</p>
+                </div>
+                <div class="row">
+                    <p class="col-6">PAG-IBIG</p>
+                    <p class="col-2">{{ p.pag_ibig|floatformat:2 }}</p>
+                </div>
+                <div class="row mt-3">
+                    <h6 class="col-8">TOTAL DEDUCTIONS</h6>
+                    <h6 class="col-4">PHP ({{ deduct|floatformat:2 }})</h6>
+                </div>
+                <hr>
+                <div class="row">
+                    <h5 class="col-8">NET PAY:</h5>
+                    <h5 class="col-4">PHP {{ p.total_pay|floatformat:2 }}</h5>
+                </div>
+            </div>  
+        </div>  
+        <div class="text-center">
+            <a href="{% url 'create_payslip' %}" class="btn btn-outline-dark mb-3">Back to Payslips Page</a>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,53 @@
+<!--
+We have not discussed the HTML language code in our program with anyone other than our instructor
+or the teaching assistants assigned to this course.
+We have not used HTML language code obtained from another student, or any other unauthorized
+source, either modified or unmodified.
+If any HTML language code or documentation used in our program was obtained from another source,
+such as a textbook or course notes, that has been clearly noted with a proper citation in the
+comments of our program.
+-->
+{% extends 'payroll_app/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'payroll_app/message.html' %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <h3 class="card-header bg-white text-center" style="padding: 10px 0;">Update Employee</h3>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <label for="Name" class="mt-2">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" required value="{{item.name}}">
+                        </div>
+                        <div class="col">
+                            <label for="id_number" class="mt-2">ID Number:</label>
+                            <input type="text" class="form-control" id="id_number" name="id_number" required value="{{item.id_number}}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="rate" class="mt-2">Rate:</label>
+                            <input type="number" min=0 class="form-control" id="rate" name="rate" required value="{{item.rate}}">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="allowance" class="mt-2">Allowance:</label>
+                            <input type="number" min=0 class="form-control" id="allowance" name="allowance" required value="{{item.allowance}}">
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <button type="submit" class="btn btn-outline-success" style="width: auto;">Update Details</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-white">
+                <a href="{% url 'view_employees' %}" class="btn btn-outline-dark mx-2 btn-sm">Back to Employees Page</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

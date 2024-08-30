@@ -1,0 +1,38 @@
+<!--
+We have not discussed the HTML language code in our program with anyone other than our instructor
+or the teaching assistants assigned to this course.
+We have not used HTML language code obtained from another student, or any other unauthorized
+source, either modified or unmodified.
+If any HTML language code or documentation used in our program was obtained from another source,
+such as a textbook or course notes, that has been clearly noted with a proper citation in the
+comments of our program.
+-->
+
+{% extends 'payroll_app/base.html' %}
+{% load static %}
+
+{% block content %} 
+
+
+<div class="col d-flex justify-content-center">
+    <div class="card mx-auto" style="width:700px">
+        <h3 class="card-header text-light bg-custom " style="background-color: #32612D;">Add Overtime Hours</h3>
+        <div class="row mx-2">
+            <form method="POST" action="{% url 'add_overtime' pk=pk %}">{% csrf_token %}
+                <div class="form-group">
+                    <br>
+                    <h5>How much do you want to add?</h5>
+                    <div class="col mb-3 col-5 justify-content-center">
+                        <input type="number" min=0 step=0.1 class="form-control my-2" id="hours" name="hours" placeholder="Overtime Hours" required>
+                        <input class="btn btn-success" type="submit" value="Add Hours" />
+                        <a href="{% url 'view_employees' %}"><div class="btn btn-secondary">Cancel</div></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %} 
+

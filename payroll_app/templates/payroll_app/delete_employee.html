@@ -1,0 +1,35 @@
+<!--
+We have not discussed the HTML language code in our program with anyone other than our instructor
+or the teaching assistants assigned to this course.
+We have not used HTML language code obtained from another student, or any other unauthorized
+source, either modified or unmodified.
+If any HTML language code or documentation used in our program was obtained from another source,
+such as a textbook or course notes, that has been clearly noted with a proper citation in the
+comments of our program.
+-->
+{% extends 'payroll_app/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="col d-flex justify-content-center">
+    <div class="card mx-auto" style="width: 700px;">
+        <div class="row mx-2">
+            <form method="POST" action="{% url 'delete_employee' pk=pk %}">
+                {% csrf_token %}
+                <div class="card-body text-center">
+                    <br>
+                    <h1 class="card-title">Are you sure?</h1>
+                    <p>Deleting this account will remove all of the employee's information from the database. This cannot be undone.</p>
+                    <br>
+                    <div class="d-flex justify-content-center ">
+                        <input class="btn btn-danger btn mx-2" type="submit" value="Yes, Delete" />
+                    </div>
+                    <div class="d-flex justify-content-center ">
+                        <a href="{% url 'view_employees' %}" class="btn btn-outline-dark mx-2" style="margin-top: 10px;">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
